@@ -4,9 +4,13 @@ use Illuminate\Support\Facades\Auth;
 
 class Uploader {
 
-    public static function upload($file)
+    public static function upload($file, $returnFullPath = false, $folder = null)
     {
-        $destinationPath = public_path().'/uploads/';
+        if ($folder == null) {
+            $folder = 'uploads';
+        }
+
+        $destinationPath = public_path().'/'.$folder.'/';
 
         if (Auth::check()) {
             $filename = str_replace(' ', '_', str_random(20) . Auth::id() . $file->getClientOriginalName());
@@ -16,8 +20,11 @@ class Uploader {
         }
 
         $uploadSuccess = $file->move($destinationPath, $filename);
+
+        if ($returnFullPath) {
+            return '/' . $folder . '/' . $filename;
+        }
         
         return $filename;
     }
-
 }
