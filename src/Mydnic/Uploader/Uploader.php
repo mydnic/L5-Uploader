@@ -13,10 +13,11 @@ class Uploader {
         $destinationPath = public_path().'/'.$folder.'/';
 
         if (Auth::check()) {
-            $filename = str_replace(' ', '_', str_random(20) . Auth::id() . $file->getClientOriginalName());
+            // If the user is authentified, we add his id to the filename for more uniqueness
+            $filename = str_replace(' ', '_', time() . Auth::id() . $file->getClientOriginalName());
         }
         else {
-            $filename = str_replace(' ', '_', str_random(20) . $file->getClientOriginalName());
+            $filename = str_replace(' ', '_', time() . $file->getClientOriginalName());
         }
 
         $uploadSuccess = $file->move($destinationPath, $filename);
