@@ -1,9 +1,11 @@
-<?php namespace Mydnic\Uploader;
+<?php
+
+namespace Mydnic\Uploader;
 
 use Illuminate\Support\Facades\Auth;
 
-class Uploader {
-
+class Uploader
+{
     public static function upload($file, $returnFullPath = false, $folder = null)
     {
         if ($folder == null) {
@@ -14,18 +16,17 @@ class Uploader {
 
         if (Auth::check()) {
             // If the user is authentified, we add his id to the filename for more uniqueness
-            $filename = str_replace(' ', '_', str_random(5) . time() . Auth::id() . $file->getClientOriginalName());
-        }
-        else {
-            $filename = str_replace(' ', '_', str_random(5) . time() . $file->getClientOriginalName());
+            $filename = str_replace(' ', '_', str_random(5).time().Auth::id().$file->getClientOriginalName());
+        } else {
+            $filename = str_replace(' ', '_', str_random(5).time().$file->getClientOriginalName());
         }
 
         $uploadSuccess = $file->move($destinationPath, $filename);
 
         if ($returnFullPath) {
-            return '/' . $folder . '/' . $filename;
+            return '/'.$folder.'/'.$filename;
         }
-        
+
         return $filename;
     }
 }
